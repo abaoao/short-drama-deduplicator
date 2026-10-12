@@ -1,0 +1,118 @@
+# 短剧原创度增强 / 变体生成器
+
+这是一个面向“短剧/短视频平台审核前预检与内容变体生成”的 Python 工具，目标不是“躲避审核”，而是帮助你：
+
+- 把同一素材生成多个不同版本
+- 增加镜头差异、字幕差异、色彩差异、节奏差异
+- 便于你做本地素材变体测试，减少重复片段和反复上传带来的机械性问题
+- 作为“原创度增强前置工具”使用，配合平台规则与人工审核判断
+
+注意：
+- 这不是平台绕过工具，也不保证一定能通过审核。
+- 它的价值在于：批量生成不同版本、提升素材原创性与可编辑性，便于你做前置优化。
+
+## 适用场景
+
+- 短剧/短视频重复素材处理
+- 你自己的同一素材做多版本剪辑
+- 适合在上传前做“素材变体审查”
+- 适合做不同镜头风格的版本输出
+
+## 安装
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+确保系统已安装 FFmpeg：
+
+```bash
+ffmpeg -version
+```
+
+## 直接使用
+
+### 1) 自动生成 4 个变体
+
+```bash
+python main.py --input ./input --output ./output --mode auto --count 4 --title "你的短剧标题"
+```
+
+### 2) 生成彩色风格版本
+
+```bash
+python main.py --input ./input --output ./output --mode color --count 2
+```
+
+### 3) 生成字幕版
+
+```bash
+python main.py --input ./input --output ./output --mode subtitle --count 2 --title "短剧标题"
+```
+
+### 4) 生成快节奏版
+
+```bash
+python main.py --input ./input --output ./output --mode speed --count 1 --speed 0.9
+```
+
+### 5) 带背景音乐
+
+```bash
+python main.py --input ./input --output ./output --mode music --count 1 --music ./music/ambient.mp3
+```
+
+## 输出结构
+
+```text
+output/
+  variant_01_color.mp4
+  variant_02_subtitle.mp4
+  variant_03_speed.mp4
+  variant_04_music.mp4
+  report.json
+```
+
+`report.json` 会记录：
+
+- 原始文件
+- 输出文件
+- 变体类型
+- 时间戳
+- 生成结果
+
+## 代码说明
+
+核心功能在：
+
+- `src/video_variant_tool.py`
+
+它负责：
+
+- 扫描输入目录
+- 提取视频文件
+- 为每个视频生成不同风格变量
+- 使用 FFmpeg 处理过滤器
+- 输出多个版本 + 报告
+
+## 一些建议
+
+- 先用 `mode=color` 或 `mode=subtitle` 做基础实验
+- 只在本地使用，不要用来规避平台规则
+- 输出多版本是为了提升素材编辑灵活性，而不是冒险操作
+
+## 免责声明
+
+本工具仅用于：
+
+- 本地素材变体生成
+- 预剪辑测试
+- 原创度增强前置整理
+
+它不保证能绕过平台审核，也不对平台风控结果负责。
+
+## 许可证
+
+MIT
